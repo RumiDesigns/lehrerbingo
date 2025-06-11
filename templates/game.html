@@ -1,0 +1,47 @@
+<!doctype html>
+<html>
+<head>
+    <title>Lehrer Bingo</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        table { border-collapse: collapse; }
+        td { border: 1px solid #666; padding: 10px; text-align: center; width: 150px; height: 50px; }
+        .done { background: #cfc; }
+        button { margin-top: 5px; }
+    </style>
+</head>
+<body>
+    <h1>Lehrer Bingo</h1>
+    <p>Player: {{ player }}</p>
+    <table>
+    {% for idx in range(words|length) %}
+        <tr>
+            {% set count = counts[idx] %}
+            <td id="cell{{ idx }}" class="{{ 'done' if count >= 2 else '' }}">
+                <div>{{ words[idx] }}</div>
+                <div><span id="count{{ idx }}">{{ count }}</span>/2</div>
+                <button onclick="tick({{ idx }})">Heard it!</button>
+            </td>
+        </tr>
+    {% endfor %}
+    </table>
+    <script>
+        const player = {{ player|tojson }};
+        const gameId = {{ game_id|tojson }};
+        function tick(index) {
+            fetch(`/game/${gameId}/tick`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({player: player, index: index})
+            }).then(r => r.json()).then(data => {
+                if (data.count !== undefined) {
+                    document.getElementById('count'+index).innerText = data.count;
+                    if (data.count >= 2) {
+                        document.getElementById('cell'+index).classList.add('done');
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>

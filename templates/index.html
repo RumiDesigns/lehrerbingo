@@ -1,0 +1,19 @@
+<!doctype html>
+<html>
+<head>
+    <title>Lehrer Bingo - Create</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        textarea { width: 300px; height: 200px; }
+        input[type=submit] { padding: 10px; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <h1>Create Bingo Sheet</h1>
+    <form action="/create" method="post">
+        <p>Enter words your teacher often says (one per line or comma separated):</p>
+        <textarea name="words"></textarea><br>
+        <input type="submit" value="Create">
+    </form>
+</body>
+</html>
